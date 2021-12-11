@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="/socket.io/socket.io.js"></script>
+        <script>
+                var socket = io('http://localhost:5000',{'forceNew':true});
+
+                socket.on('mensaje',function(data){
+
+                        alert(data);
+
+                });
+
+
+
+                socket.on('mensajes_cliente',function(data){
+
+
+                        document.getElementById("mensajes").innerHTML="";
+                         
+                         data.forEach(element => {
+                             
+                            document.getElementById("mensajes").innerHTML+=`<strong>${element.usuario}</strong><br/>${element.mensaje}<br/>`;
+
+
+                         });
+
+
+                });
+
+
+
+
+                window.onload=function(){
+                    
+                        var boton = document.getElementById("enviar_mensaje_a_servidor").addEventListener('click',function(){
+                            
+                            let mensaje = {
+                                usuario:document.getElementById('usuario').value,
+                                mensaje:document.getElementById('mensaje').value
+                            };
+
+                            socket.emit('nuevo_mensaje',mensaje);
+
+                        });
+
+                }
+        </script>
+         </head>
+
+         <body>
+
+                <div style="height:500px;width:300px; background: gold; padding: 30px; margin-left: 30%;">
+                    <h2>Mi chat</h2>
+                    <input type="text" id="usuario"/><br><br>
+                    <textarea name="" id="mensaje" cols="30" rows="10"></textarea>
+    
+                    <hr><br>
+                    
+                    <button id="enviar_mensaje_a_servidor">enviar mensaje</button>   
+                    <div id="mensajes" style="overflow-y: scroll; height: 200px; background: gainsboro; color: hotpink; margin-top: 10px;"></div>
+                </div>
+          
+
+         </body>
+
+       
+   
+
+
+
+</html>
